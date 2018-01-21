@@ -1,0 +1,8 @@
+{
+  "name": "video-mobile",
+  "app_id": "91c156ab",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
