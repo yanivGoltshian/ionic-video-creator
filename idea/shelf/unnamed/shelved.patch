@@ -1,0 +1,81 @@
+Index: src/pages/play/play.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><ion-header>\n  <ion-navbar>\n    <ion-title>\n      Video Creator\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button\n        icon-only\n        (click)=\"saveVideo()\">\n        <ion-icon name=\"save\"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <video controls=\"controls\" preload=\"metadata\" autoplay=\"autoplay\" webkit-playsinline=\"webkit-playsinline\" class=\"videoPlayer\">\n    <source src=\"https://img.playbuzz.com/video/upload/vc_h264/v1516101546/up0szhaqpakhv4dnzpkz.mp4\" type=\"video/mp4\" />\n  </video>\n</ion-content>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/pages/play/play.html	(date 1516102218000)
++++ src/pages/play/play.html	(revision )
+@@ -1,7 +1,7 @@
+ <ion-header>
+   <ion-navbar>
+     <ion-title>
+-      Video Creator
++      Juggler
+     </ion-title>
+     <ion-buttons end>
+       <button ion-button
+Index: src/pages/home/home.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><ion-header>\n  <ion-navbar>\n    <ion-title>\n      Video Creator\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button\n        icon-only\n        (click)=\"addScene()\">\n        <ion-icon name=\"add\"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-slides [pager]=\"true\">\n    <ion-slide *ngFor=\"let scene of scenes\">\n      <div class=\"scene-media-container\">\n        <div class=\"scene-media\">\n          <button ion-button\n            (click)=\"addImage(scene)\"\n            *ngIf=\"!scene.base64Image\">Add image</button>\n          <img [src]=\"scene.base64Image\"\n            *ngIf=\"scene.base64Image\" />\n        </div>\n      </div>\n      <ion-input class=\"scene-text\"\n        placeholder=\"Add text\"\n        [(ngModel)]=\"scene.text\"\n        clearInput></ion-input>\n    </ion-slide>\n  </ion-slides>\n\n</ion-content>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/pages/home/home.html	(date 1516102218000)
++++ src/pages/home/home.html	(revision )
+@@ -1,7 +1,7 @@
+ <ion-header>
+   <ion-navbar>
+     <ion-title>
+-      Video Creator
++      Juggler
+     </ion-title>
+     <ion-buttons end>
+       <button ion-button
+@@ -31,5 +31,8 @@
+         clearInput></ion-input>
+     </ion-slide>
+   </ion-slides>
+-
++  <button ion-button
++          [navPush]="playPage"
++          (click)="generate()"
++  >Juggle</button>
+ </ion-content>
+Index: src/pages/home/home.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { Component } from '@angular/core';\nimport { NavController } from 'ionic-angular';\nimport { ImagePicker } from '@ionic-native/image-picker';\nimport { Camera } from '@ionic-native/camera';\nimport { clamp } from 'ionic-angular/util/util';\nimport { ViewChild } from '@angular/core';\nimport { Slides } from 'ionic-angular';\nimport { CloudinaryService } from '../../services/CloudinaryService';\n\n@Component({\n  selector: 'page-home',\n  templateUrl: 'home.html'\n})\nexport class HomePage {\n  public scenes: any[];\n  @ViewChild(Slides) slides: Slides;\n\n  constructor(\n    public navCtrl: NavController,\n    public camera: Camera,\n    public cloudinaryService: CloudinaryService,\n  ) {\n    this.scenes = [];\n    this.scenes.push({});\n  }\n\n  async addScene() {\n    this.scenes.push({});\n    setTimeout(() => this.slides.slideTo(this.slides.length() - 1, 500), 100);\n  }\n\n  async addImage(scene) {\n    const imageData = await this.camera.getPicture({\n      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,\n      destinationType: this.camera.DestinationType.DATA_URL\n    });\n\n    scene.base64Image = `data:image/jpeg;base64,${imageData}`;\n    scene.imageUrl = await this.cloudinaryService.uploadBase64Image(scene.base64Image);\n    console.log(scene.imageUrl);\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/pages/home/home.ts	(date 1516102218000)
++++ src/pages/home/home.ts	(revision )
+@@ -6,12 +6,14 @@
+ import { ViewChild } from '@angular/core';
+ import { Slides } from 'ionic-angular';
+ import { CloudinaryService } from '../../services/CloudinaryService';
++import {PlayPage} from '../play/play';
+ 
+ @Component({
+   selector: 'page-home',
+   templateUrl: 'home.html'
+ })
+ export class HomePage {
++  playPage = PlayPage;
+   public scenes: any[];
+   @ViewChild(Slides) slides: Slides;
+ 
+@@ -24,6 +26,10 @@
+     this.scenes.push({});
+   }
+ 
++  async generate() {
++
++  }
++
+   async addScene() {
+     this.scenes.push({});
+     setTimeout(() => this.slides.slideTo(this.slides.length() - 1, 500), 100);
