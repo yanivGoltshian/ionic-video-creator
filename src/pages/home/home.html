@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <img class="navbar-image"
+        src="../assets/imgs/Juggler-Logo.png" />
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides [pager]="true">
+    <ion-slide *ngFor="let scene of videoSpecService.scenes">
+      <div class="scene-media-container"
+        [style.background-image]="scene.imageUrlStyle">
+        <button class="media-button-image"
+          (click)="addImage(scene, false)"
+          *ngIf="!scene.base64Image && !scene.loading"></button>
+        <button class="media-button-camera"
+          (click)="addCamera(scene)"
+          *ngIf="!scene.base64Image && !scene.loading"></button>
+        <button class="scene-button replace-media-button"
+          (click)="addImage(scene)"
+          *ngIf="scene.imageUrlStyle"></button>
+        <button class="scene-button remove-media-button"
+          (click)="removeImage(scene)"
+          *ngIf="scene.imageUrlStyle"></button>
+        <button class="scene-button remove-scene-button"
+          (click)="removeScene(scene)"
+          *ngIf="isSceneRemovable(scene)"></button>
+        <div class="spinner"
+          *ngIf="scene.loading">
+        </div>
+        <div class="scene-text-container">
+          <input class="scene-text"
+            placeholder="Add text"
+            [(ngModel)]="scene.text"
+            type="text">
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <div class="bottom-controls">
+    <button ion-button
+      outline
+      icon-left
+      (click)="addScene()">
+      <ion-icon name="add"></ion-icon>Add scene</button>
+    <button ion-button
+      class="juggle-button"
+      (click)="juggle()"
+      [ngClass]="{enabled: isReadyToJuggle()}">Juggle</button>
+  </div>
+</ion-footer>
